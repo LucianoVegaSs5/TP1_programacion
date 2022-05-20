@@ -17,7 +17,7 @@ DIVISION 1D
 #include "printearMenues.h"
 
 #define NOMBRE 51
-#define LEN 10 //LARGO
+#define LEN 2000 //LARGO
 
 int main(void)
 {
