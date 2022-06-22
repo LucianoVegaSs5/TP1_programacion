@@ -32,3 +32,26 @@ void mostrarMenuSalida(int *salir);
  * @return retorna la opcion, 1 menor a mayor y 2 mayor a menor
  */
 int preguntaOrdenListado(void);
+
+
+/**
+ * @brief pregunta si desea contunuar modificando datos
+ *
+ * @param modificar
+ */
+void deseaContinuar(int* modificar );
+
+/**
+ * @brief muestra el menu de modificacion del usuario y pide la opcion
+ *
+ * @param opcion
+ */
+void mostrarMenuModificar(int* opcion);
+
+/**
+ * @brief Pregunta si el usuario desea guardar cambios
+ *
+ * @param opcion
+ */
+void guardarCambios(int* opcion);
+

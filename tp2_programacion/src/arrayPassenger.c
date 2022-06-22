@@ -29,42 +29,42 @@ int mostrarPasajero(ePassenger passenger, int length)
 {
     int retorno =-1;
 
+    char estadoDeVuelo[25];
+    char tipoPasajero[25];
+
     if(length > 0)
     {
-    	printf("      %d       ",passenger.id);
-    	printf("%s       ", passenger.name);
-    	printf("%s       ", passenger.lastName);
-    	printf("%.2f        ",passenger.price);
-    	printf("%s              ",passenger.flycode);
-
     	switch(passenger.typePassenger)
     	{
     		case 1:
-    			printf("TURISTA                  ");
+    			strcpy(tipoPasajero, "TURISTA");
     			break;
     		case 2:
-    			printf("COMERCIAL                ");
+    			strcpy(tipoPasajero,"COMERCIAL");
 				break;
     		case 3:
-    		    printf("JUBILADO                 ");
+    			strcpy(tipoPasajero,"JUBILADO");
     			break;
     		case 4:
-    		    printf("DISTINTA CAPACIDAD       ");
+    			strcpy(tipoPasajero,"DISTINTA CAPACIDAD");
     			break;
     	}
 
     	switch(passenger.statusFlight)
     	{
        		case 1:
-   	   			printf("ACTIVO\n");
+   	   			strcpy(estadoDeVuelo,"ACTIVO");
    	   			break;
        		case 2:
-       			printf("DEMORA\n");
+       			strcpy(estadoDeVuelo,"DEMORA");
 				break;
   	   		case 3:
-   	 		    printf("EN ESPERA\n");
+  	   		strcpy(estadoDeVuelo,"EN ESPERA");
        			break;
-   	    	}
+   	    }
+
+    printf("||%-6d||%-16s||%-10s\t||%-7.2f\t||%-6s\t||%-14s\t||%s\n",passenger.id, passenger.name, passenger.lastName, passenger.price, passenger.flycode, tipoPasajero, estadoDeVuelo);
+
 
         retorno = 0;
     }
@@ -114,9 +114,10 @@ lastName[],float price,int typePassenger, char flycode[], int statusFlight)
     int lugarVacio;
 
     lugarVacio = buscarLugarVacio(list, len);
+
     if(lugarVacio > -1)
     {
-        if(list != NULL && len > 0)
+        if(list != NULL && len >= 0)
         {
             list[lugarVacio].isEmpty = 0;//Declaramos que el lugar ya no esta vacio
             list[lugarVacio].id = id;
@@ -137,14 +138,18 @@ int findPassengerById(ePassenger* list, int len,int id)
     int i;
     int retorno =-1;
 
-    if(list != NULL && len > 0)
+    if(list != NULL && len >= 0)
     {
         for(i=0; i<len; i++)
         {
-            if(list[i].id == id)
-            {
-                retorno = i;
-            }
+        	if(list[i].isEmpty == 0)
+        	{
+				if(list[i].id == id)
+				{
+					retorno = i;
+					break;
+				}
+        	}
         }
     }
 
@@ -200,7 +205,7 @@ int sortPassengers(ePassenger* list, int len, int order)
                         {
                             if(diferencia  == 0)
                             {
-                                if(list[i].typePassenger >= list[j].typePassenger)
+                                if(list[i].typePassenger <= list[j].typePassenger)
                                 {
                                     guardar = list[j];
                                     list[j] = list[i];
@@ -227,7 +232,7 @@ int sortPassengers(ePassenger* list, int len, int order)
                         {
                             if(diferencia  == 0)
                             {
-                                if(list[i].typePassenger <= list[j].typePassenger)
+                                if(list[i].typePassenger >= list[j].typePassenger)
                                 {
                                     guardar = list[j];
                                     list[j] = list[i];
@@ -253,7 +258,9 @@ int printPassenger(ePassenger* list, int length)
 
     if(list != NULL && length > 0)
     {
-        printf("\n      iD      Nombre      Apellido        Precio       codVuelo         Tipo de Pasajero        Estado de Vuelo\n\n");
+        printf("======================================================================================================================\n");
+        printf("    iD        Nombre          Apellido        Precio         codVuelo       Tipo de Pasajero       Estado de Vuelo \n");
+        printf("======================================================================================================================\n");
         for(i=0; i<length; i++)
         {
             if(list[i].isEmpty == 0)
@@ -264,6 +271,8 @@ int printPassenger(ePassenger* list, int length)
                 }
             }
         }
+        printf("=====================================================================================================================\n");
+
     }
 
     return retorno;
@@ -364,29 +373,31 @@ int altaPasajero(ePassenger lista[], int tam, int* contadorId, int* primerIngres
     			auxPassenger.id=*contadorId;
     			(*contadorId)++;
 
-    			getString(nombre, "Ingrese su nombre: ");
+    			pedirString(nombre, "Ingrese su nombre: ","Error, no ingrese numeros\n");
 
-    			getString(apellido, "Ingrese su apellido: ");
+    			pedirString(apellido, "Ingrese su apellido: ","Error, no ingrese numeros\n");
 
-    			getNumeroValidarMaxMinFloat(&price, "Ingrese el precio del vuelo: ",
-    			"Error, ingrese un precio mayor a 0 y menor a 10000", 10000, 1);
+    			pedirNumerosFloat(&price, "Ingrese el precio del vuelo: ","Error, solo ingrese numeros\n",
+    			"Error, ingrese un precio mayor a 0 \n", 100000000, 1);
 
-    			getString(codVuelo, "Ingrese Su codigo De vuelo: ");
+    			printf( "Ingrese Su codigo De vuelo: ");
+    			fflush(stdin);
+    			gets(codVuelo);
 
-    			getNumeroValidarMaxMin(&tipoPasajero, "Ingrese el tipo de pasajero\n"
+    			pedirNumeros(&tipoPasajero, "\nIngrese el tipo de pasajero\n"
     			                            "1- TURISTA\n"
     			                            "2- COMERCIAL\n"
     			                            "3- JUBILADO/A\n"
-    			                            "4- DISTINTA CAPACIDAD\n", "Error, ingrese una opcion Valida\n"
+    			                            "4- DISTINTA CAPACIDAD\n", "Error, debe ingresar solo un numero\n","Error, ingrese una opcion Valida\n"
                                                                 "1- TURISTA\n"
     			                                                "2- COMERCIAL\n"
     			                                                "3- JUBILADO/A\n"
     			                                                "4- DISTINTA CAPACIDAD\n", 4,1);
 
-    			getNumeroValidarMaxMin(&estadoVuelo, "Ingrese el estado de Vuelo\n"
+    			pedirNumeros(&estadoVuelo, "Ingrese el estado de Vuelo\n"
     			                            "1- ACTIVO\n"
     			                            "2- DEMORA\n"
-    			                            "3- EN ESPERA\n", "Error, ingrese una opcion Valida\n"
+    			                            "3- EN ESPERA\n", "Error, debe ingresar solo un numero\n","Error, ingrese una opcion Valida\n"
     			                                            "1- ACTIVO\n"
     			                                            "2- DEMORA\n"
     			                                            "3- EN ESPERA\n", 3,1);
@@ -428,10 +439,16 @@ int realizarCargaForzada(ePassenger list[], int len){
 	if(list != NULL && len > 0)
 	{
 		addPassenger(list, len, 1,"Lucas ", "Gaspar", 3000, 3, "ABC123", 3);
-		addPassenger(list, len, 2,"Alejandra","Paz ", 5000, 2, "ABC123", 2);
+		addPassenger(list, len, 2,"Alejandra","Paz", 5000, 2, "ABC123", 2);
 		addPassenger(list, len, 3,"Marcos", "Suarez", 1000, 4, "YZX789", 2);
-		addPassenger(list, len, 4,"Romina", "Sosa  ", 1500, 3, "YZX789", 1);
-		addPassenger(list, len, 5,"Jose  ", "Rival ", 8000, 1, "LMN456", 1);
+		addPassenger(list, len, 4,"Romina", "Sosa", 1500, 3, "YZX789", 1);
+		addPassenger(list, len, 5,"Jose  ", "Rival", 8000, 4, "LMN456", 1);
+		addPassenger(list, len, 6,"Miriam ", "Lopez", 3000, 3, "ABC123", 3);
+		addPassenger(list, len, 7,"Roman","Gutierrez", 5000, 4, "ABC123", 2);
+		addPassenger(list, len, 8,"Ruben", "Rival", 1000, 4, "YZX789", 3);
+		addPassenger(list, len, 9,"Samuel", "Sosa", 1500, 3, "YZX789", 2);
+		addPassenger(list, len, 10,"Monica", "Coronel", 8000, 1, "LMN456", 1);
+
 
 		retorno = 0;
 
@@ -537,10 +554,11 @@ void informarPasajeros(ePassenger list[], int len, int flagDeCarga, int flagDeIn
 	if(list !=  NULL && len > 0 &&(flagDeCarga == 1 || flagDeIngreso == 1))
 	{
 		printf("----------- INFORMAR -----------\n");
-		getNumeroValidarMaxMin(&opcion, "INFORMAR\n"
-										"1)LISTADO DE LOS PASAJEROS ORDENADOS ALFABETICAMENTE POR APELLIDO Y TIPO DE PASAJERO.\n"
-										"2)TOTAL Y PROMEDIO DE LOS PRECIOS DE LOS PASAJEROS. Y CUANTOS PASAJEROS SUPERAN EL PRECIO PROMEDIO.\n"
-										"3)LISTADO DE LOS PASAJEROS POR CODIGO DE VUELO Y ESTADO DE VUELOS ‘ACTIVO’\n", "ERROR, INGRESE UNA OPCION VALIDA\n", 3,1);
+		pedirNumeros(&opcion, "INFORMAR\n"
+									"1)LISTADO DE LOS PASAJEROS ORDENADOS ALFABETICAMENTE POR APELLIDO Y TIPO DE PASAJERO.\n"
+									"2)TOTAL Y PROMEDIO DE LOS PRECIOS DE LOS PASAJEROS. Y CUANTOS PASAJEROS SUPERAN EL PRECIO PROMEDIO.\n"
+									"3)LISTADO DE LOS PASAJEROS POR CODIGO DE VUELO Y ESTADO DE VUELOS ‘ACTIVO’\n", "ERROR, INGRESE UNA OPCION VALIDA\n",
+									"ERROR, ELIJA UNA OPCION ENTRE 3-1\n", 3,1);
 
 		switch(opcion)
 		{
@@ -590,15 +608,18 @@ void informarPasajeros(ePassenger list[], int len, int flagDeCarga, int flagDeIn
 void bajaPasajero(ePassenger list[], int len, int flagDeCarga, int flagDeIngreso)
 {
 	int idPasajeroBorrar;
-	int validacionPocision;
+	int validacionPocision = 0;
 	int opcion;
 
 
 	if(list != NULL && len > 0 && (flagDeCarga == 1 || flagDeIngreso == 1))
 	{
 		printf("----------- BAJA -----------\n");
-		getNumeroValidarMaxMin(&idPasajeroBorrar, "INGRESE EL ID DEL PASAJERO QUE QUIERE BORRAR\n", "ERROR, INGRESE UN ID MAYOR A 0\n", 2000, 1);
+		pedirNumeros(&idPasajeroBorrar, "INGRESE EL ID DEL PASAJERO QUE QUIERE BORRAR\n","ERROR,SOLO DEBE INGRESAR NUMEROS\n", "ERROR, INGRESE UN ID MAYOR A 0\n", 2000, 1);
+
 		validacionPocision = findPassengerById(list, len, idPasajeroBorrar);
+
+		printf("%d pocision en el array\n", validacionPocision);
 
 		if(validacionPocision < 0)
 		{
@@ -607,15 +628,19 @@ void bajaPasajero(ePassenger list[], int len, int flagDeCarga, int flagDeIngreso
 		else
 		{
 			printf("PASAJERO CON ID %d\n", idPasajeroBorrar);
-			printf("\n      iD      Nombre      Apellido        Precio     Tipo de Pasajero      codVuelo      Estado de Vuelo\n\n");
+	        printf("    iD        Nombre          Apellido        Precio         codVuelo       Tipo de Pasajero       Estado de Vuelo \n");
+
 			mostrarPasajero(list[validacionPocision], len);
-			getNumeroValidarMaxMin(&opcion, "¿ESTA SEGURO DE BORRAR LOS DATOS DEL PASAJERO?\n"
+
+			pedirNumeros(&opcion, "\n¿ESTA SEGURO DE BORRAR LOS DATOS DEL PASAJERO?\n"
 								"1) CONFIRMAR\n"
-								"2) CANCELAR\n","ERROR, ELIJA UNA OPCION VALIDA",2,1);
+								"2) CANCELAR\n","ERROR, ELIJA UNA OPCION VALIDA\n","ERROR, ELIJA UNA OPCION ENTRE 2-1\n",2,1);
 			if(opcion == 1)
 			{
-				list[validacionPocision].isEmpty = 1;
-				printf("LOS DATOS FUERON BORRADOS CON EXITO");
+				if(removePassenger(list, len, idPasajeroBorrar) == 0)
+				{
+					printf("LOS DATOS FUERON BORRADOS CON EXITO");
+				}
 			}
 			else
 			{
@@ -633,19 +658,20 @@ void modificarPasajero(ePassenger list[], int len, int flagDeCarga, int flagDeIn
 {
 	int idPasajeroModificar;
 	int validacionPocision;
-	int opcion;
+	int guardar;
 	char nombre[51];
 	char apellido[51];
 	float price;
 	char codVuelo[20];
 	int tipoPasajero;
 	int estadoVuelo;
-
+	int continuar;
+	int opcionModificar;
 
 	if(list != NULL && len > 0 && (flagDeCarga == 1 || flagDeIngreso == 1))
 	{
 		printf("----------- MODIFICAR -----------\n");
-		getNumeroValidarMaxMin(&idPasajeroModificar, "INGRESE EL ID DEL PASAJERO QUE QUIERE MODIFICAR\n", "ERROR, INGRESE UN ID MAYOR A 0\n", 2000, 1);
+		pedirNumeros(&idPasajeroModificar, "INGRESE EL ID DEL PASAJERO QUE QUIERE MODIFICAR\n","Error, solo numeros", "ERROR, INGRESE UN ID MAYOR A 0\n", 2000, 1);
 		validacionPocision = findPassengerById(list, len, idPasajeroModificar);
 
 		if(validacionPocision < 0)
@@ -655,67 +681,121 @@ void modificarPasajero(ePassenger list[], int len, int flagDeCarga, int flagDeIn
 		else
 		{
 			printf("PASAJERO CON ID %d\n", idPasajeroModificar);
-			printf("\n      iD      Nombre      Apellido        Precio     Tipo de Pasajero      codVuelo      Estado de Vuelo\n\n");
+			printf("    iD        Nombre          Apellido        Precio         codVuelo       Tipo de Pasajero       Estado de Vuelo \n");
+
 			mostrarPasajero(list[validacionPocision], len);
 
-			list[validacionPocision].id= idPasajeroModificar;
+			list[validacionPocision].id = idPasajeroModificar;
 
-			getString(nombre, "Ingrese el nuevo nombre: ");
-			getString(apellido, "Ingrese el nuevo apellido: ");
+			do{
+				 mostrarMenuModificar(&opcionModificar);
 
-			getNumeroValidarMaxMinFloat(&price, "Ingrese el nuevo precio del vuelo: ",
-			"Error, ingrese un precio mayor a 0 y menor a 10000", 10000, 1);
-
-			getString(codVuelo, "Ingrese Su nuevo codigo De vuelo: ");
-
-			getNumeroValidarMaxMin(&tipoPasajero, "Ingrese el tipo de pasajero\n"
-			   		                            "1- TURISTA\n"
-			   		                            "2- COMERCIAL\n"
-			   		                            "3- JUBILADO/A\n"
-			   		                            "4- DISTINTA CAPACIDAD\n", "Error, ingrese una opcion Valida\n"
-		                                                        "1- TURISTA\n"
-		    	                                                "2- COMERCIAL\n"
-		   		                                                "3- JUBILADO/A\n"
-																"4- DISTINTA CAPACIDAD\n", 4,1);
-
-			getNumeroValidarMaxMin(&estadoVuelo, "Ingrese el estado de Vuelo\n"
-		    	                            "1- ACTIVO\n"
-		  		                            "2- DEMORA\n"
-		  		                            "3- EN ESPERA\n", "Error, ingrese una opcion Valida\n"
+				switch(opcionModificar)
+				{
+					case 1:
+						pedirString(nombre, "\nIngrese su nombre: ","Error, no ingrese numeros\n");
+						guardarCambios(&guardar);
+						if(guardar == 1)
+						{
+						   	strcpy(list[validacionPocision].name, nombre);
+						}
+						else
+						{
+							printf("Operacion cancelada\n");
+						}
+						break;
+					case 2:
+						pedirString(apellido, "Ingrese su apellido: ","Error, no ingrese numeros\n");
+						guardarCambios(&guardar);
+						if(guardar == 1)
+						{
+							strcpy(list[validacionPocision].lastName, apellido);
+						}
+						else
+						{
+							printf("Operacion cancelada\n");
+						}
+						break;
+					case 3:
+						pedirNumerosFloat(&price, "Ingrese el precio del vuelo: ","Error, solo ingrese numeros\n",
+								    		"Error, ingrese un precio mayor a 0 ", 10000000, 1);
+						guardarCambios(&guardar);
+						if(guardar == 1)
+						{
+							list[validacionPocision].price =  price;
+						}
+						else
+						{
+							printf("Operacion cancelada\n");
+						}
+						break;
+					case 4:
+						printf( "Ingrese Su codigo De vuelo: ");
+						fflush(stdin);
+						gets(codVuelo);
+						guardarCambios(&guardar);
+						if(guardar == 1)
+						{
+							strcpy(list[validacionPocision].flycode, codVuelo);
+						}
+						else
+						{
+							printf("Operacion cancelada\n");
+						}
+						break;
+					case 5:
+						pedirNumeros(&tipoPasajero, "\nIngrese el tipo de pasajero\n"
+														"1- TURISTA\n"
+														"2- COMERCIAL\n"
+														"3- JUBILADO/A\n"
+														"4- DISTINTA CAPACIDAD\n","Error, solo numero", "Error, ingrese una opcion Valida\n"
+																		"1- TURISTA\n"
+																		"2- COMERCIAL\n"
+																		"3- JUBILADO/A\n"
+																		"4- DISTINTA CAPACIDAD\n", 4,1);
+						guardarCambios(&guardar);
+						if(guardar == 1)
+						{
+							list[validacionPocision].typePassenger = tipoPasajero;
+						}
+						else
+						{
+							printf("Operacion cancelada\n");
+						}
+						break;
+					case 6:
+						pedirNumeros(&estadoVuelo, "Ingrese el estado de Vuelo\n"
 													"1- ACTIVO\n"
-			  	                                    "2- DEMORA\n"
-				                                    "3- EN ESPERA\n", 3,1);
+													"2- DEMORA\n"
+													"3- EN ESPERA\n", "Error, solo numero","Error, ingrese una opcion Valida\n"
+															"1- ACTIVO\n"
+															"2- DEMORA\n"
+															"3- EN ESPERA\n", 3,1);
 
-			getNumeroValidarMaxMin(&opcion, "¿ESTA SEGURO DE MODIFICAR LOS DATOS DEL PASAJERO?\n"
-								"1) CONFIRMAR\n"
-								"2) CANCELAR\n","ERROR, ELIJA UNA OPCION VALIDA",2,1);
-			if(opcion == 1)
-			{
+						guardarCambios(&guardar);
+						if(guardar == 1)
+						{
+							list[validacionPocision].statusFlight = estadoVuelo;
+						}
+						else
+						{
+							printf("Operacion cancelada\n");
+						}
+						break;
+				}
 
-			   	strcpy(list[validacionPocision].name, nombre);
-			  	strcpy(list[validacionPocision].lastName, apellido);
-			  	list[validacionPocision].price = price;
-		    	strcpy(list[validacionPocision].flycode, codVuelo);
-		    	list[validacionPocision].typePassenger = tipoPasajero;
-		    	list[validacionPocision].statusFlight = estadoVuelo;
+				deseaContinuar(&continuar);
 
-				printf("\n      iD      Nombre      Apellido        Precio     Tipo de Pasajero      codVuelo      Estado de Vuelo\n\n");
+			}while(continuar != 2);
+
+		    	printf("    iD        Nombre          Apellido        Precio         codVuelo       Tipo de Pasajero       Estado de Vuelo \n");
 				mostrarPasajero(list[validacionPocision], len);
-
-				printf("LOS DATOS FUERON MODIFICADOS CON EXITO");
-
-				printf("OCURRIO UN ERROR");
-
-			}
-			else
-			{
-				printf("OPERACION CANCELADA\n");
-			}
+				printf("\nLOS DATOS FUERON MODIFICADOS CON EXITO\n");
 		}
 	}
 	else
 	{
-		printf("SE NECESITAN INGRESAR DATOS PRIMERO\n");
+		printf("\nSE NECESITAN INGRESAR DATOS PRIMERO\n");
 	}
 }
 

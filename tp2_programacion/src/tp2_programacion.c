@@ -26,14 +26,14 @@ int main(void)
 	int validarInicializacion;
     int opcion;
     int salir;
-    int iDs = 6;
+    int iDs = 11;
     int flagCarga = 0;
     int primerIngreso = 0;
 
     validarInicializacion = initPassengers(list, LEN);
 
     if(validarInicializacion == 0)
-   {
+    {
     	do
     	{
            	mostrarMenuPrincipal(&opcion);
@@ -58,6 +58,9 @@ int main(void)
    	   			case 6:
         			mostrarMenuSalida(&salir);
   	    			break;
+   	   			default:
+   	   				printf("ERROR, ELIJA UNA OPCION VALIDA\n");
+   	   				break;
        		}
 
     	}while(salir != 1);
