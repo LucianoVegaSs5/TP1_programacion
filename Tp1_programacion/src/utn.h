@@ -1,101 +1,62 @@
 /*
- * utn.h
+ * UTN_validaciones.h
  *
- *  Created on: 8 abr. 2022
- *      Author: Luciano Vega
+ *  Created on: 13 may. 2022
+ *      Author: Luciano
  */
 
 #ifndef UTN_H_
 #define UTN_H_
 
+#endif /* UTN_VALIDACIONES_H_ */
 
 /**
- * @fn ejecutarMenuPrincipalUno
- * @brief Ejecuta el menu principal y llama a la funcion de ingreso de datos
+ * @brief recibe un array y verifica si hay almenos una letra si es asi devuelve -1, sino devuelve 1
  *
- * @return los kilometros ingresados
+ * @param cadena
+ * @return 1 si no hay letras, sino devuelve -1
  */
-int ejecutarMenuPrincipalUno();
+int validarCadenaDeNumeros(char* cadena);
 
-/// @fn ejecutarMenuDos
-/// @brief ejecuta el menu principal y pide los precios de la segunda opcion
-///
-/// @param flagAereolinea
-/// @return
-float ejecutarMenuDos(int flagAereolinea);
 
 /**
- * @fn ejecutarMenuTres
- * @brief ejecuta el menu principal y llama a todas las funciones
- *  de calculo para calcular los costos
+ * @brief pide un nombre por consola y verifica que el array Nombre no tenga numeros y hace un buqle con la variable retorno
+ * hasta que se escriba bien el nombre
  *
- * @return 0
+ * @param nombre (char [])
+ * @param mensaje (char [])
+ * @param mensajeError (char [])
+ * @return retorna 1 si salio todo bien
  */
-int ejecutarMenuTres();
+int pedirString(char* nombre, char* mensaje, char* mensajeError);
 
-/// @fn ejecutarMenuCuatro
-/// @brief ejecuta el menu principal y
-/// pide los datos calculados para llamar a la funcion "mostrarCostos()"
-///
-/// @param kilometrosIngresados
-/// @param precioVueloAereolineas
-/// @param precioVueloLatam
-/// @param debitoAereolineas
-/// @param creditoAereolineas
-/// @param bitcoinAereolineas
-/// @param unitarioAereolineas
-/// @param debitoLatam
-/// @param creditoLatam
-/// @param bitcoinLatam
-/// @param unitarioLatam
-/// @param diferenciaPrecio
-/// @return
-int ejecutarMenuCuatro(int kilometrosIngresados, float precioVueloAereolineas,
-float precioVueloLatam, float debitoAereolineas, float creditoAereolineas,
-float bitcoinAereolineas, float unitarioAereolineas, float debitoLatam,
-float creditoLatam, float bitcoinLatam, float unitarioLatam, float diferenciaPrecio);
+/**
+ * @brief pide un numero como array y verifica que todos sean numeros, si es asi lo transforma a int y compara que este entre los rangos
+ * pedidos, el bucle se hace con la variable retorno
+ *
+ * @param numero (int*) puntero en el que se guarda la variable
+ * @param mensaje  (char  *) mensaje para pedir el dato
+ * @param mensajeError (char* ) mensaje usado para indicar el error si no se ingreso numeros
+ * @param mensajeError2 (char *) mensaje de error utilizado para indicar que este entre los rangos el numero pedido
+ * @param maximo (int)
+ * @param minimo (int )
+ * @return
+ */
+int pedirNumeros(int* numero, char* mensaje, char* mensajeError, char* mensajeError2, int maximo, int minimo);
 
-/// @fn mostrarCostos
-/// @brief pide los datos a mostrar en orden
-///
-/// @param kilometrosIngresados
-/// @param precioVueloAereolineas
-/// @param precioVueloLatam
-/// @param debitoAereolineas
-/// @param creditoAereolineas
-/// @param bitcoinAereolineas
-/// @param unitarioAereolineas
-/// @param debitoLatam
-/// @param creditoLatam
-/// @param bitcoinLatam
-/// @param unitarioLatam
-/// @param diferenciaPrecio
-/// @return
-int mostrarCostos(int kilometrosIngresados, float precioVueloAereolineas,
-float precioVueloLatam, float debitoAereolineas, float creditoAereolineas,
-float bitcoinAereolineas, float unitarioAereolineas, float debitoLatam,
-float creditoLatam, float bitcoinLatam, float unitarioLatam, float diferenciaPrecio);
+/**
+ * @brief pide un numero como array y verifica que todos sean numeros, si es asi lo transforma a float y compara que este entre los rangos
+ * pedidos, el bucle se hace con la variable retorno
+ *
+ * @param numero (float*) puntero en el que se guarda la variable
+ * @param mensaje  (char  *) mensaje para pedir el dato
+ * @param mensajeError (char* ) mensaje usado para indicar el error si no se ingreso numeros
+ * @param mensajeError2 (char *) mensaje de error utilizado para indicar que este entre los rangos el numero pedido
+ * @param maximo (int)
+ * @param minimo (int )
+ * @return
+ */
+int pedirNumerosFloat(float* numero, char* mensaje, char* mensajeError, char* mensajeError2, int maximo, int minimo);
 
-/// @fn ejecutarMenuCinco
-/// @brief pide los datos calculados por si se pide de nuevo la opcion 4 y
-/// calcula los datos para la carga forzada y habilita el salir de la opcion 6.
-///
-/// @param kilometrosIngresados
-/// @param precioVueloAereolineas
-/// @param precioVueloLatam
-/// @param debitoAereolineas
-/// @param creditoAereolineas
-/// @param bitcoinAereolineas
-/// @param unitarioAereolineas
-/// @param debitoLatam
-/// @param creditoLatam
-/// @param bitcoinLatam
-/// @param unitarioLatam
-/// @param diferenciaPrecio
-/// @return
-int ejecutarMenuCinco(int kilometrosIngresados, float precioVueloAereolineas,
-float precioVueloLatam, float debitoAereolineas, float creditoAereolineas,
-float bitcoinAereolineas, float unitarioAereolineas, float debitoLatam,
-float creditoLatam, float bitcoinLatam, float unitarioLatam, float diferenciaPrecio);
+void getNumeroValidarMaxMinFloat(float *numero, char mensaje[],char mensajeError[], int max, int min);
 
-#endif /* UTN_H_ */

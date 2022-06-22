@@ -1,12 +1,9 @@
 /*
  ============================================================================
- Luciano Vega 1D
- Trabajo Practico Nro 1
- 1 Enunciado
-Una agencia de viaje necesita calcular costos para sus vuelos de Latam y Aerolíneas Argentinas
-para ofrecerlos a sus clientes.
-Se deberá ingresar por cada vuelo los km totales y el precio total del mismo.
-El objetivo de la aplicación es mostrar las diferentes opciones de pagos a sus clientes.
+Luciano Rafael Vega Luna
+Division 1D
+Traba Practico 1
+Laboratorio 1, Programacion 1
  ============================================================================
  */
 
@@ -15,78 +12,102 @@ El objetivo de la aplicación es mostrar las diferentes opciones de pagos a sus 
 #include "utn.h"
 #include "calculos.h"
 #include "ingresodatos.h"
+#include "funciones_tp.h"
 
- //valor del bitcoin 14/4/2022 en pesos fuente: https://www.ripio.com/ar/
-#define valorBitcoin 7677037.38
+
+#define LMCARGAFORZADA 159339 //Precio de la carga forzada de latam
+#define AECARGAFORZADA 162965 //Precio de la carga forzada de aereolineas
+#define KMCARGAFORZADA 7090 //km de la carga forzada
 
 int main(void)
 {
 	setbuf(stdout,NULL);
 
-	/**variables 1ra opción.*/
-	int kilometrosIngresados;
+	int opcion;
+	int kilometros;
+	float precioLatam;
+	float precioAereolineas;
+	int primerIngresoKm = 0;
+	int primerIngresoPrecios = 0;
+	int calcular = 0;
 
-	/**variables 2da opción.*/
-	float precioVueloLatam;
-	float precioVueloAereolineas;
+	float diferencia;
 
-	/**variables 3er y 4ta opcion.*/
-	float debitoAereolineas;
-	float creditoAereolineas;
-	float bitcoinAereolineas;
-	float unitarioAereolineas;
-	float debitoLatam;
-	float creditoLatam;
-	float bitcoinLatam;
-	float unitarioLatam;
-	float diferenciaPrecio;
+	float creditoPrecioLm;
+	float debitoPrecioLm;
+	float bitcoinPrecioLm;
+	float unitarioPrecioLm;
 
-	/**Mostramos el menu principal y pedimos los kilometros*/
-	kilometrosIngresados = ejecutarMenuPrincipalUno();
+	float creditoPrecioAe;
+	float debitoPrecioAe;
+	float bitcoinPrecioAe;
+	float unitarioPrecioAe;
 
-	/**Mostramos el menu principal y pedimos los precios*/
-	precioVueloAereolineas = ejecutarMenuDos(0);
-	precioVueloLatam = ejecutarMenuDos(1);
+	do{
 
-	/**Mostramos el menu principal y calulamos los costos*/
-	ejecutarMenuTres();
+		mostrarMenuPrincipal(&opcion);
 
-	debitoAereolineas = calcularDebito(precioVueloAereolineas, 10);
-	debitoLatam = calcularDebito(precioVueloLatam, 10);
-	creditoAereolineas = calcularCredito(precioVueloAereolineas, 25);
-	creditoLatam = calcularCredito(precioVueloLatam, 25);
-	bitcoinAereolineas = calcularBitcoin(precioVueloAereolineas, valorBitcoin);
-	bitcoinLatam = calcularBitcoin(precioVueloLatam, valorBitcoin);
-	unitarioAereolineas = calcularUnitario(precioVueloAereolineas ,kilometrosIngresados);
-	unitarioLatam = calcularUnitario(precioVueloLatam ,kilometrosIngresados);
-	diferenciaPrecio = calcularDiferencia(precioVueloLatam, precioVueloAereolineas);
+		switch(opcion)
+		{
+			case 1:
+				if(ingresarKilometros(&kilometros,&primerIngresoKm)!= 1)
+				{
+					printf("Ocurrio un error al cargar los kilometros\n");
+				}
+				break;
+			case 2:
+				if(primerIngresoKm)
+				{
+					if(ingresarPrecios(&precioLatam, &precioAereolineas, &primerIngresoPrecios) != 1)
+					{
+						printf("Ocurrio un error al cargar los precios\n");
+					}
+				}
+				else
+				{
+					printf("\nNecesita cargar kilometros \n");
+				}
+				break;
+			case 3:
+				if(primerIngresoKm && primerIngresoPrecios)
+				{
+					diferencia = calcularCostos(&calcular, &creditoPrecioLm,&debitoPrecioLm,&bitcoinPrecioLm,&unitarioPrecioLm,
+							&creditoPrecioAe,&debitoPrecioAe,&bitcoinPrecioAe,&unitarioPrecioAe, kilometros,precioLatam,precioAereolineas);
+					if(diferencia < 0)
+					{
+						printf("Ocurrio un error al calcular costos");
+					}
+				}
+				else
+				{
+					printf("\nNecesita cargar kilometros y precios \n");
+				}
+				break;
+			case 4:
+				if(primerIngresoKm && primerIngresoPrecios && calcular)
+				{
+					printearCostos(creditoPrecioLm,debitoPrecioLm,bitcoinPrecioLm,unitarioPrecioLm,
+							creditoPrecioAe,debitoPrecioAe,bitcoinPrecioAe,unitarioPrecioAe, kilometros,precioLatam,precioAereolineas,diferencia);
+				}
+				else
+				{
+					printf("\nNecesita cargar kilometros, precios y calcular los costos\n");
 
-	/**Mostramos el menu principal y enseñamos los costos*/
-	ejecutarMenuCuatro(kilometrosIngresados, precioVueloAereolineas,
-			precioVueloLatam, debitoAereolineas,creditoAereolineas,
-			bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-			creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
+				}
+				break;
+			case 5:
+				cargaForzada(KMCARGAFORZADA,LMCARGAFORZADA, AECARGAFORZADA);
+				break;
+			case 6:
+				printf("\nSaliendo del sistema...");
+				break;
+			default:
+				printf("Error, elija una opcion valida\n");
+				break;
+		}
 
-	/**Mostramos el menu principal y enseñamos los costos forzados
-	Volvemos a dar como parametros las variables de la opcion 4 por si se
-	pide volver a mostrar*/
-	ejecutarMenuCinco(kilometrosIngresados, precioVueloAereolineas,
-			precioVueloLatam, debitoAereolineas,creditoAereolineas,
-			bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-			creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-
-	/**mostramos el menu principal, habilitamos la opcion salir,
-	si el susuario lo pide informar resultados y carga forzada una vez más
-	y habilitamos el salir**/
-
-	if(ejecutarMenuCinco(kilometrosIngresados, precioVueloAereolineas,
-					precioVueloLatam, debitoAereolineas,creditoAereolineas,
-					bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-					creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio) != 6)
-	{
-		printf("\nFin de la funcion.");
-	}
-
+	}while(opcion != 6);
 
 	return 0;
 }
+

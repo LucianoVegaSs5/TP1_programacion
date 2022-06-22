@@ -8,39 +8,16 @@
 #include <stdio.h>
 #include "utn.h"
 #include "calculos.h"
-#include "ingresodatos.h"
 
-int mostrarMenu()
+
+void mostrarMenuPrincipal(int* opcion)
 {
-int opcion;
-
-	do
-	{
-		printf( "\n1)Ingresar Kilómetros\n"
-				"2)Ingresar Precio de Vuelos\n"
-				"3)Calcular todos los costos\n"
-				"4)Informar Resultados\n"
-				"5)Carga forzada de datos\n"
-				"6)Salir\n");
-
-		printf("Elija una opcion: ");
-		scanf("%d", &opcion);
-
-	}while(opcion > 6 || opcion < 1);
-
-    return opcion;
+	pedirNumeros(opcion, "\n\n============== MENU PRINCIPAL==============\n"
+						"1)Ingresar kilometros\n"
+						"2)Ingresar Precio de Vuelos\n"
+						"3)Calcular todos los costos\n"
+						"4)Informar Resultados\n"
+						"5)Carga forzada de datos\n"
+						"6)Salir\n"
+						"Ingrese una opcion: ", "Error, el numero ingresado es invalido\n", "Error, elija una opcion valida\n",6,1);
 }
-int ingresoDatosOpcionUno()
-{
-	int kilometrosIngresados;
-
-	do
-	{
-		printf("\nIngrese la cantidad de kilometros: ");
-		scanf("%d", &kilometrosIngresados);
-
-	}while(kilometrosIngresados < 1);
-
-	return kilometrosIngresados;
-}
-

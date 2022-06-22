@@ -14,7 +14,7 @@
  *
  * @return la opcion
  */
-int mostrarMenu();
+void mostrarMenuPrincipal(int* opcion);
 
 /**
  * @fn ingresoDatosOpcionUno

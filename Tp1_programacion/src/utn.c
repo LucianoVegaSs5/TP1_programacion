@@ -7,266 +7,208 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
+#include <ctype.h>
 #include "utn.h"
-#include "calculos.h"
-#include "ingresodatos.h"
-#define valorBitcoin 7677037.38//valor del bitcoin 14/4/2022 en pesos fuente: https://www.ripio.com/ar/
 
-
-int ejecutarMenuPrincipalUno()
+void getNumeroValidarMaxMin(int* numero, char mensaje[],char mensajeError[], int max, int min)
 {
-	int opcion;
-	int kilometrosIngresados;
+    int flag = 1;
 
-	opcion = mostrarMenu();
+    do{
+        if(flag== 1)
+        {
+            printf("%s", mensaje);
+            fflush(stdin);
+            scanf("%d", numero);
+            flag = 0;
+        }
+        else
+        {
+            printf("%s", mensajeError);
+            fflush(stdin);
+            scanf("%d", numero);
+        }
 
-	if(opcion == 1)
-	{
-		kilometrosIngresados = ingresoDatosOpcionUno();
-	}
-	else
-	{
-		printf("\nNecesita ingresar kilometros para continuar \n");
-		ejecutarMenuPrincipalUno();
-	}
 
-	return kilometrosIngresados;
+    }while(*numero < min || *numero > max );
 }
 
-float ejecutarMenuDos(int flagAereolinea)
+void ponerMayusculas(char* nombre)
 {
-	int opcion;
-	float precioVuelo;
+    strlwr(nombre);
 
-	if(flagAereolinea == 0)
+	nombre[0] = toupper(nombre[0]);
+
+	for(int i = 0; i < strlen(nombre); i++)
 	{
-		opcion = mostrarMenu();
-
-		if(opcion == 2)
+		if (nombre[i] == ' ')
 		{
-			printf("\nIngrese el precio de Aerolineas: ");
-			scanf("%f", &precioVuelo);
+			nombre[i + 1] = toupper(nombre[i + 1]);
 		}
-		else
+	}
+
+}
+
+int pedirString(char* string, char* mensaje, char* mensajeError)
+{
+	int retorno = -1;
+	int i;
+
+	do
+	{
+		printf("%s",mensaje);
+		fflush(stdin);
+		gets(string);
+
+		for (i = 0; i < strlen(string); i++)
 		{
-			if(opcion == 1)
+			if(isalpha(*(string+i)) == 0 && isspace(*(string+i))== 0 )
 			{
-				printf("\nYa ingreso Los kilometros\n");
-				ejecutarMenuDos(0);
-			}
-			else
-			{
-				printf("\nNecesita ingresar los precios\n");
-				ejecutarMenuDos(0);
+				retorno = -1;
+				printf("%s\n", mensajeError);
+				break;
 			}
 
-		}
-	}
-	else
-	{
-		printf("\nIngrese el precio de Latam: ");
-		scanf("%f", &precioVuelo);
-	}
-
-	return precioVuelo;
-}
-
-int ejecutarMenuTres()
-{
-	int opcion;
-
-	opcion = mostrarMenu();
-
-		switch(opcion)
-		{
-		case 1:
-		 	printf("\nYa ingreso los kilometros.\n");
-		 	ejecutarMenuTres();
-		 	break;
-		case 2:
-		 	printf("\nYa ingreso los precios.\n");
-		 	ejecutarMenuTres();
-		 	break;
-		case 3:
-			printf("\nCalculando costos...\n");
-		 	break;
-		default:
-		 	printf("\nNecesita calcular los costos para continuar\n");
-		 	ejecutarMenuTres();
-		 	break;
+			retorno = 1;
 		}
 
-	return 0;
+	}while(retorno != 1);
+
+	ponerMayusculas(string);
+
+	return retorno;
 }
 
-int ejecutarMenuCuatro(int kilometrosIngresados, float precioVueloAereolineas,
-	float precioVueloLatam, float debitoAereolineas, float creditoAereolineas,
-	float bitcoinAereolineas, float unitarioAereolineas, float debitoLatam,
-	float creditoLatam, float bitcoinLatam, float unitarioLatam, float diferenciaPrecio)
+int validarCadenaDeNumeros(char* cadena)
 {
-	int opcion;
+   int i=0;
+   int retorno = 1;
 
-	opcion = mostrarMenu();
+   while(cadena[i] != '\0')
+   {
+       if(cadena[i] < '0' || cadena[i] > '9')
+       {
+           retorno = 0;
+       }
 
-	if(opcion == 4)
-	{
-		mostrarCostos(kilometrosIngresados, precioVueloAereolineas,
-				precioVueloLatam, debitoAereolineas,creditoAereolineas,
-				bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-				creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-	}
-	else
-	{
-		switch(opcion)
-		{
-			case 1:
-				printf("\nYa se ingresaron los kilometros.\n");
-				ejecutarMenuCuatro(kilometrosIngresados, precioVueloAereolineas,
-						precioVueloLatam, debitoAereolineas,creditoAereolineas,
-						bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-						creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-				break;
-			case 2:
-				printf("Ya se ingresaron los precios.\n");
-				ejecutarMenuCuatro(kilometrosIngresados, precioVueloAereolineas,
-						precioVueloLatam, debitoAereolineas,creditoAereolineas,
-						bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-						creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-				break;
-			case 3:
-				printf("Los precios ya fueron calculados.\n");
-				ejecutarMenuCuatro(kilometrosIngresados, precioVueloAereolineas,
-						precioVueloLatam, debitoAereolineas,creditoAereolineas,
-						bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-						creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-				break;
-			default:
-				printf("Debe de mostrar los precios.\n");
-				ejecutarMenuCuatro(kilometrosIngresados, precioVueloAereolineas,
-						precioVueloLatam, debitoAereolineas,creditoAereolineas,
-						bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-						creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-				break;
-		}
+       i++;
+   }
 
-	}
-	return 0;
+   return retorno;
 }
 
-int mostrarCostos(int kilometrosIngresados, float precioVueloAereolineas,
-	float precioVueloLatam, float debitoAereolineas, float creditoAereolineas,
-	float bitcoinAereolineas, float unitarioAereolineas, float debitoLatam,
-	float creditoLatam, float bitcoinLatam, float unitarioLatam, float diferenciaPrecio)
+int pedirNumeros(int* numero, char* mensaje, char* mensajeError, char* mensajeError2, int maximo, int minimo)
+{
+    int validarCadena;
+    char cadenaNumeros[20];
+    int retorno;
+    int numeroAux;
+
+    do
+    {
+        if(cadenaNumeros != NULL && mensaje !=  NULL && mensajeError != NULL)
+        {
+            printf("%s", mensaje);
+            fflush(stdin);
+            gets(cadenaNumeros);
+
+            validarCadena = validarCadenaDeNumeros(cadenaNumeros);
+            if(validarCadena == 1)
+            {
+                numeroAux = atoi(cadenaNumeros);
+
+                if(numeroAux < minimo || numeroAux > maximo)
+                {
+                    printf("%s", mensajeError2);
+                        retorno = -1;
+                }
+                else
+                {
+                    retorno = 1;
+                    *numero = numeroAux;
+                }
+            }
+            else
+            {
+                printf("%s", mensajeError);
+                retorno = -1;
+            }
+        }
+
+    }while(retorno != 1);
+
+    return retorno;
+}
+int pedirNumerosFloat(float* numero, char* mensaje, char* mensajeError, char* mensajeError2, int maximo, int minimo)
+{
+    int validarCadena;
+    char cadenaNumeros[20];
+    int retorno;
+    float numeroAux;
+
+    do
+    {
+        if(cadenaNumeros != NULL && mensaje !=  NULL && mensajeError != NULL)
+        {
+            printf("%s", mensaje);
+            fflush(stdin);
+            gets(cadenaNumeros);
+
+            validarCadena = validarCadenaDeNumeros(cadenaNumeros);
+            if(validarCadena == 1)
+            {
+                numeroAux = atof(cadenaNumeros);
+
+                if(numeroAux < minimo || numeroAux > maximo)
+                {
+                    printf("%s", mensajeError2);
+                        retorno = -1;
+                }
+                else
+                {
+                    retorno = 1;
+                    *numero = numeroAux;
+                }
+            }
+            else
+            {
+                printf("%s", mensajeError);
+                retorno = -1;
+            }
+        }
+
+    }while(retorno != 1);
+
+    return retorno;
+}
+
+
+void getNumeroValidarMaxMinFloat(float *numero, char mensaje[],char mensajeError[], int max, int min)
 {
 
-    printf("\nKilometros: %d\n"
-    		"Precio Aereolineas: %.2f\n"
-    		"Precio Latam: %.2f\n"
-    		"\nAereolineas: \n"
-			"Precio con tarjeta de débito: %.2f"
-			" pesos. \n"
-			"Precio con tarjeta de crédito: %.2f"
-			" pesos. \n"
-			"Precio pagado con bitcoin: %.10f"
-			" bitcoins \n"
-			"Precio unitario: %.2f"
-			" pesos por Km.\n"
-			"Latam: \n"
-			"Precio con tarjeta de débito: %.2f"
-			" pesos. \n"
-			"Precio con tarjeta de crédito: %.2f"
-			" pesos. \n"
-			"Precio pagado con bitcoin: %.10f"
-			" bitcoins \n"
-			"Precio unitario: %.2f"
-			" pesos por Km.\n"
-			"La diferencia de Precio es: %.2f\n"
-			,kilometrosIngresados, precioVueloAereolineas, precioVueloLatam, debitoAereolineas,
-			creditoAereolineas, bitcoinAereolineas, unitarioAereolineas,
-			debitoLatam, creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
+    int flag = 1;
+
+    do
+    {
+        if (flag== 1)
+        {
+            printf("%s\n", mensaje);
+            fflush(stdin);
+            scanf("%f", numero);
+            flag = 0;
+        }
+        else
+        {
+            printf("%s\n", mensajeError);
+            fflush(stdin);
+            scanf("%f", numero);
+        }
 
 
-    return 0;
+    }while(*numero < min || *numero > max );
+
 }
 
-int ejecutarMenuCinco(int kilometrosIngresados, float precioVueloAereolineas,
-		float precioVueloLatam, float debitoAereolineas, float creditoAereolineas,
-		float bitcoinAereolineas, float unitarioAereolineas, float debitoLatam,
-		float creditoLatam, float bitcoinLatam, float unitarioLatam, float diferenciaPrecio)
-{
-	int opcion;
-	int kilometrosIngresadosF;
-	float precioVueloLatamF;
-	float precioVueloAereolineasF;
-	float debitoAereolineasF;
-	float creditoAereolineasF;
-	float bitcoinAereolineasF;
-	float unitarioAereolineasF;
-	float debitoLatamF;
-	float creditoLatamF;
-	float bitcoinLatamF;
-	float unitarioLatamF;
-	float diferenciaPrecioF;
-
-	kilometrosIngresadosF = 7090;
-	precioVueloLatamF = 159339;
-	precioVueloAereolineasF = 162965;
-
-	opcion = mostrarMenu();
-
-	switch(opcion)
-	{
-		case 1:
-			printf("\nYa se ingresaron los kilometros.\n");
-			ejecutarMenuCinco(kilometrosIngresados, precioVueloAereolineas,
-					precioVueloLatam, debitoAereolineas,creditoAereolineas,
-					bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-					creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-			break;
-		case 2:
-			printf("\nYa se ingresaron los precios.\n");
-			ejecutarMenuCinco(kilometrosIngresados, precioVueloAereolineas,
-					precioVueloLatam, debitoAereolineas,creditoAereolineas,
-					bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-					creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-			break;
-		case 3:
-			printf("\nYa se calcularon los costos.\n");
-			ejecutarMenuCinco(kilometrosIngresados, precioVueloAereolineas,
-					precioVueloLatam, debitoAereolineas,creditoAereolineas,
-					bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-					creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-			break;
-		case 4:
-			mostrarCostos(kilometrosIngresados, precioVueloAereolineas,
-					precioVueloLatam, debitoAereolineas,creditoAereolineas,
-					bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-					creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-			ejecutarMenuCinco(kilometrosIngresados, precioVueloAereolineas,
-					precioVueloLatam, debitoAereolineas,creditoAereolineas,
-					bitcoinAereolineas, unitarioAereolineas, debitoLatam,
-					creditoLatam, bitcoinLatam, unitarioLatam, diferenciaPrecio);
-			break;
-		case 5:
-				debitoAereolineasF = calcularDebito(precioVueloAereolineasF, 10);
-				debitoLatamF = calcularDebito(precioVueloLatamF, 10);
-				creditoAereolineasF = calcularCredito(precioVueloAereolineasF, 25);
-				creditoLatamF = calcularCredito(precioVueloLatamF, 25);
-				bitcoinAereolineasF = calcularBitcoin(precioVueloAereolineasF, valorBitcoin);
-				bitcoinLatamF = calcularBitcoin(precioVueloLatamF, valorBitcoin);
-				unitarioAereolineasF = calcularUnitario(precioVueloAereolineasF,kilometrosIngresadosF);
-				unitarioLatamF = calcularUnitario(precioVueloLatamF,kilometrosIngresadosF);
-				diferenciaPrecioF= calcularDiferencia(precioVueloLatamF, precioVueloAereolineasF);
-
-				mostrarCostos(kilometrosIngresadosF, precioVueloAereolineasF, precioVueloLatamF,
-						debitoAereolineasF, creditoAereolineasF, bitcoinAereolineasF, unitarioAereolineasF,
-						debitoLatamF, creditoLatamF, bitcoinLatamF, unitarioLatamF, diferenciaPrecioF);
-				break;
-		case 6:
-			printf("\nFin de la funcion.");
-			break;
-
-	}
-
-	return opcion;
-}

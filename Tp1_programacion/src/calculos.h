@@ -35,7 +35,7 @@ float calcularCredito(float precioVuelo, int interes);
  * @param valorBit
  * @return e valor del pago en bitcoins
  */
-float calcularBitcoin(float precioVuelo, float valorBit);
+float calcularBitcoin(float precioVuelo);
 /**
  *@fn calcularUnitario
  * @brief calcula el precio por kilometro ingresado
