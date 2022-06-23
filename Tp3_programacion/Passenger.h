@@ -20,8 +20,27 @@ typedef struct
 
 }Passenger;
 
+/**
+ * Reserva memoria dinamica para un nuevo pasajero
+ * @return
+ */
 Passenger* Passenger_new();
+/**
+ * Recibe los campos en tipo string obtenidos del formato texto y usa los setters para agregarlos a un pasajero
+ * @param idStr
+ * @param nombreStr
+ * @param apellidoStr
+ * @param codigoVueloStr
+ * @param tipoPasajeroStr
+ * @param precioStr
+ * @param estadoVueloStr
+ * @return
+ */
 Passenger* Passenger_newParametros(char* idStr,char* nombreStr,char* apellidoStr, char* codigoVueloStr, char* tipoPasajeroStr, char* precioStr, char* estadoVueloStr);
+/**
+ * Libera la memoria dinamica de la estructura
+ * @param this
+ */
 void Passenger_delete(Passenger* this);
 
 int Passenger_setId(Passenger* this,int id);
@@ -45,6 +64,13 @@ int Passenger_getPrecio(Passenger* this,float* precio);
 int Passenger_setEstadoVuelo (Passenger* this,char* estadoVuelo);
 int Passenger_getEstadoVuelo (Passenger* this,char* estadoVuelo);
 
+/**
+ * Funcion que ejecuta la logica para el ordenamiento de pasajeros por id
+ *
+ * @param pasajeroUno
+ * @param pasajeroDos
+ * @return
+ */
 int Passenger_sortById(void* pasajeroUno, void* pasajeroDos);
 
 void Passenger_print(Passenger* this);

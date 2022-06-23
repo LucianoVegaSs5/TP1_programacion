@@ -263,6 +263,12 @@ int controller_corregirId(LinkedList* pArrayListPassenger, int cantPasajerosAgre
 	return retorno;
 }
 
+/**
+ * con un for pide pasajaeros y compara si el id es igual al pasado por parametros y retorna la pocision encontrada
+ * @param pArrayListPassenger
+ * @param id
+ * @return
+ */
 int controller_findPassengerById(LinkedList* pArrayListPassenger, int id)
 {
 	int retorno = -1;
@@ -374,7 +380,7 @@ int controller_editPassenger(LinkedList* pArrayListPassenger,int cantidadPasajer
 								break;
 							case 3:
 								printf("\nModificar Precio\n");
-								pedirNumerosFloat(&precioAux, "Ingrese el precio del voleto: ", "Error, precio no valido", "Error elija un numero mayor a 0",1000000,1);
+								pedirNumerosFloat(&precioAux, "Ingrese el precio del voleto: ", "Error, precio no valido\n", "Error elija un numero mayor a 0\n",10000000,1);
 								if(Passenger_setPrecio(pasajeroModificar, precioAux))
 								{
 									printf("Se Modifico correctamente \n");
@@ -404,7 +410,7 @@ int controller_editPassenger(LinkedList* pArrayListPassenger,int cantidadPasajer
 												"1)First Class\n"
 												"2)Executive Class\n"
 												"3)Economy Class\n"
-												"Elija la opcion correspondiente: ", "Error, elija una opcion valida", "Error, elija una opcion entre 1 y 3",3,1);
+												"Elija la opcion correspondiente: ", "Error, elija una opcion valida\n", "Error, elija una opcion entre 1 y 3\n",3,1);
 								if(Passenger_setTipoPasajero(pasajeroModificar, tipoPasajeroAux))
 								{
 									printf("Se Modifico correctamente \n");
@@ -421,7 +427,7 @@ int controller_editPassenger(LinkedList* pArrayListPassenger,int cantidadPasajer
 										"2)En horario\n"
 										"3)En vuelo\n"
 										"4)Demorado\n"
-										"Elija la opcion correspondiente: ", "Error, elija una opcion valida", "Error, elija una opcion entre 1 y 4",4,1);
+										"Elija la opcion correspondiente: ", "Error, elija una opcion valida\n", "Error, elija una opcion entre 1 y 4\n",4,1);
 
 								switch(estadoVueloAux)
 								{
@@ -587,9 +593,10 @@ int controller_ListPassenger(LinkedList* pArrayListPassenger)
 
 	if(pArrayListPassenger != NULL)
 	{
-		len = ll_len(pArrayListPassenger);
-		if(len >= 1)
+
+		if(ll_isEmpty(pArrayListPassenger) == 0)
 		{
+			len = ll_len(pArrayListPassenger);
 			printf("\n==============================================================================================================\n");
 			printf("ID          NOMBRE           APELLIDO 	     PRECIO 	     CODIGO	     TIPO PASAJERO          ESTADO \n");
 			printf("==============================================================================================================\n");
@@ -626,19 +633,22 @@ int controller_sortPassenger(LinkedList* pArrayListPassenger)
 
 	if(pArrayListPassenger !=  NULL)
 	{
-		preguntarOrden(&orden);
-		if(orden== 2)
+		if(ll_isEmpty(pArrayListPassenger))
 		{
-			orden = 0;
-		}
-		printf("\n Ordenando la lista...\n");
-		if(ll_sort(pArrayListPassenger, Passenger_sortById, orden) == 0)
-		{
-			printf("La lista fue ordenada por id\n");
-		}
-		else
-		{
-			printf("Ocurio un error al ordenar la lista por id\n");
+			preguntarOrden(&orden);
+			if(orden== 2)
+			{
+				orden = 0;
+			}
+			printf("\n Ordenando la lista...\n");
+			if(ll_sort(pArrayListPassenger, Passenger_sortById, orden) == 0)
+			{
+				printf("La lista fue ordenada por id\n");
+			}
+			else
+			{
+				printf("Ocurio un error al ordenar la lista por id\n");
+			}
 		}
 
 		retorno = 0;

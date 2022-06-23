@@ -6,6 +6,9 @@
 #include "printMenues.h"
 
 /****************************************************
+ * Vega Luna Luciano Rafael
+ * Tp3 laboratorio 1
+ * 1D
     Menu:
      1. Cargar los datos de los pasajeros desde el archivo data.csv (modo texto).
      2. Cargar los datos de los pasajeros desde el archivo data.csv (modo binario).

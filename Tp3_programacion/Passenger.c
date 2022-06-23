@@ -296,7 +296,7 @@ void Passenger_print(Passenger* this)
 										}
 									}
 
-									printf("%-6d||%-16s||%-12s\t||%-7.2f\t||%-6s\t||%-14s\t||%s\n", idPasajero, nombre, apellido, precio, codigoVuelo, tipoPasajeroChar, estadoVuelo);
+									printf("||%-6d||%-16s||%-12s\t||%-7.2f\t||%-6s\t||%-14s\t||%s\n", idPasajero, nombre, apellido, precio, codigoVuelo, tipoPasajeroChar, estadoVuelo);
 								}
 							}
 						}
