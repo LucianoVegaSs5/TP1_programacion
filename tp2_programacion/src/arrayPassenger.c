@@ -308,7 +308,7 @@ int sortPassengersByCode(ePassenger* list, int len, int order)
                         {
                             if(diferencia == 0)
                             {
-                                if(list[i].statusFlight > list[j].statusFlight)
+                                if(list[i].statusFlight < list[j].statusFlight)
                                 {
                                     guardar = list[j];
                                     list[j] = list[i];
@@ -334,7 +334,7 @@ int sortPassengersByCode(ePassenger* list, int len, int order)
                         {
                             if(diferencia == 0)
                             {
-                                if(list[i].statusFlight < list[j].statusFlight)
+                                if(list[i].statusFlight > list[j].statusFlight)
                                 {
                                     guardar = list[j];
                                     list[j] = list[i];
@@ -438,13 +438,13 @@ int realizarCargaForzada(ePassenger list[], int len){
 
 	if(list != NULL && len > 0)
 	{
-		addPassenger(list, len, 1,"Lucas ", "Gaspar", 3000, 3, "ABC123", 3);
-		addPassenger(list, len, 2,"Alejandra","Paz", 5000, 2, "ABC123", 2);
-		addPassenger(list, len, 3,"Marcos", "Suarez", 1000, 4, "YZX789", 2);
-		addPassenger(list, len, 4,"Romina", "Sosa", 1500, 3, "YZX789", 1);
-		addPassenger(list, len, 5,"Jose  ", "Rival", 8000, 4, "LMN456", 1);
+		addPassenger(list, len, 1,"Lucas ", "Gaspar", 3000, 3, "ABC123", 1);
+		addPassenger(list, len, 2,"Alejandra","Paz", 5000, 1, "ABC123", 2);
+		addPassenger(list, len, 3,"Marcos", "Suarez", 1000, 4, "YZX789", 1);
+		addPassenger(list, len, 4,"Romina", "Sosa", 1500, 2, "YZX789", 2);
+		addPassenger(list, len, 5,"Jose  ", "Rival", 8000, 1, "LMN456", 2);
 		addPassenger(list, len, 6,"Miriam ", "Lopez", 3000, 3, "ABC123", 3);
-		addPassenger(list, len, 7,"Roman","Gutierrez", 5000, 4, "ABC123", 2);
+		addPassenger(list, len, 7,"Roman","Gutierrez", 5000, 4, "ABC123", 1);
 		addPassenger(list, len, 8,"Ruben", "Rival", 1000, 4, "YZX789", 3);
 		addPassenger(list, len, 9,"Samuel", "Sosa", 1500, 3, "YZX789", 2);
 		addPassenger(list, len, 10,"Monica", "Coronel", 8000, 1, "LMN456", 1);
@@ -618,8 +618,6 @@ void bajaPasajero(ePassenger list[], int len, int flagDeCarga, int flagDeIngreso
 		pedirNumeros(&idPasajeroBorrar, "INGRESE EL ID DEL PASAJERO QUE QUIERE BORRAR\n","ERROR,SOLO DEBE INGRESAR NUMEROS\n", "ERROR, INGRESE UN ID MAYOR A 0\n", 2000, 1);
 
 		validacionPocision = findPassengerById(list, len, idPasajeroBorrar);
-
-		printf("%d pocision en el array\n", validacionPocision);
 
 		if(validacionPocision < 0)
 		{
